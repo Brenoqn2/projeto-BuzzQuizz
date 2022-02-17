@@ -8,6 +8,9 @@
   --cor-primeira-pergunta: #434ca0;
   --cor-resposta-certa: #009c22;
   --cor-resposta-errada: #ff4b4b;
+  --cor-mensagem: #484848;
+  --cor-texto-reiniciar: #fff5f4;
+  --cor-texto-voltar: #818181;
 }
 
 * {
@@ -44,20 +47,20 @@ main {
   max-width: 1051px;
   width: 90vw;
   margin: 0 auto;
-  margin-top:calc(69px + 31px);
-  display:flex;
-  flex-direction:column;
+  margin-top: calc(69px + 31px);
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
 .seus-quizzes,
-.todos-quizzes{
-  display:flex;
-  flex-direction:column;
+.todos-quizzes {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  position:relative;
+  position: relative;
   margin: 0 auto;
-  width:100%;
+  width: 100%;
 }
 
 .seus-quizzes .header {
@@ -118,11 +121,11 @@ main {
   font-size: 20px;
   font-weight: 700;
   line-height: 23.44px;
-  position:relative;
-  margin-top:35px;
-  margin-bottom:14px;
-  width:100%;
-  max-width:340px;
+  position: relative;
+  margin-top: 35px;
+  margin-bottom: 14px;
+  width: 100%;
+  max-width: 340px;
 }
 
 .quizz {
@@ -141,7 +144,6 @@ main {
   cursor: pointer;
   position: relative;
 }
-
 
 .quizz .quizz-titulo {
   width: 90%;
@@ -235,7 +237,7 @@ main {
 
 .alternativas .alternativa img {
   width: 163px;
-  height:113px;
+  height: 113px;
 }
 
 .alternativa .texto {
@@ -257,6 +259,65 @@ main {
 
 .resposta-errada {
   color: var(--cor-resposta-errada);
+}
+
+.pagina-quizz .quiz-resultado {
+  max-width: 727px;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.quiz-resultado .topo {
+  width: 100%;
+  height: max-content;
+  background-color: var(--cor-principal);
+  padding: 22px 10px;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--cor-texto-hd);
+  text-align: center;
+}
+
+.quiz-resultado section {
+  width: 100%;
+  margin-top: 9px;
+}
+
+.quiz-resultado section img {
+  width: 100%;
+}
+
+.quiz-resultado section .mensagem {
+  margin-top: 20px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--cor-mensagem);
+}
+
+.quiz-resultado .btn-reiniciar {
+  display: block;
+  margin: 50px auto 0;
+  padding: 16px 51px;
+  background-color: var(--cor-principal);
+  font-size: 18px;
+  border: none;
+  outline: none;
+  border-radius: 15px;
+  color: var(--cor-texto-reiniciar);
+  cursor: pointer;
+}
+
+.quiz-resultado .btn-voltar {
+  display: block;
+  margin: 0 auto 0;
+  padding: 16px 30px;
+  margin-top: 9px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  color: var(--cor-texto-voltar);
+  cursor: pointer;
 }
 
 @media screen and (min-width: 780px) {

@@ -22,31 +22,24 @@
         </div>
 
         <div class="quizz" onclick="selecionarQuizz()">
-          <p class="quizz-titulo">
-            Teste
-          </p>
+          <p class="quizz-titulo">Teste</p>
         </div>
 
         <div class="quizz" onclick="selecionarQuizz()">
-          <p class="quizz-titulo">
-            Teste
-          </p>
+          <p class="quizz-titulo">Teste</p>
         </div>
 
         <div class="quizz" onclick="selecionarQuizz()">
-          <p class="quizz-titulo">
-            Teste
-          </p>
+          <p class="quizz-titulo">Teste</p>
         </div>
 
-        <div class="caixaQuizzesVazios" isCorrectAnswer = 'true'>
+        <div class="caixaQuizzesVazios" isCorrectAnswer="true">
           <p>Você não criou nenhum quizz ainda :(</p>
           <button class="btn">Criar Quizz</button>
         </div>
       </section>
       <h2 class="titulo">Todos os Quizzes</h2>
-      <section class="todos-quizzes">
-      </section>
+      <section class="todos-quizzes"></section>
     </main>
 
     <aside class="pagina-quizz hidden">
@@ -69,17 +62,32 @@
               <p class="texto">Ratata</p>
             </div>
           </div>
-          <div class = "alternativas">
+          <div class="alternativas">
             <div class="alternativa">
               <img src="./assets/sapo-gordo.png" />
               <p class="texto">Sapo Gordo</p>
             </div>
           </div>
         </div>
-
       </div>
 
-      
+      <div class="quiz-resultado hidden">
+        <div class="topo">
+          <h3 class="texto"></h3>
+        </div>
+
+        <section>
+          <img src="" />
+          <p class="mensagem"></p>
+        </section>
+
+        <button class="btn-reiniciar" onclick="reiniciarQuizz()">
+          Reiniciar Quizz
+        </button>
+        <button class="btn-voltar" onclick="voltarParaHome()">
+          Voltar pra home
+        </button>
+      </div>
     </aside>
 
     <script
