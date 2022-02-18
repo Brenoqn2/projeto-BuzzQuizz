@@ -13,9 +13,24 @@ function obterQuizzes() {
 }
 
 function renderizarQuizzes(quizzes) {
+  const seusQuizzes = document.querySelector(".seus-quizzes");
   const todosQuizzes = document.querySelector(".todos-quizzes");
+  const caixasQuizzesVazios = seusQuizzes.querySelector(".caixaQuizzesVazios");
+  const header = seusQuizzes.querySelector(".header");
 
   todosQuizzes.innerHTML = "";
+
+  if (!localStorage.getItem("seusQuizzes")) {
+    localStorage.setItem("seusQuizzes", JSON.stringify(null));
+  }
+
+  if (JSON.parse(localStorage.getItem("seusQuizzes"))) {
+    caixasQuizzesVazios.classList.add("hidden");
+
+    header.classList.remove("hidden");
+    header.children[0].classList.remove("hidden");
+    header.children[1].classList.remove("hidden");
+  }
 
   quizzes.forEach((quiz) => {
     arrQuizzes.push(quiz);
@@ -224,6 +239,16 @@ function voltarParaHome() {
   window.scrollTo(0, 0);
   main.classList.remove("hidden");
   paginaQuiz.classList.add("hidden");
+}
+
+function criarQuizz() {
+  const paginaCriarQuizz = document.querySelector(".pagina-criar-quiz");
+  const main = document.querySelector("main");
+
+  if (paginaCriarQuizz && main) {
+    paginaCriarQuizz.classList.remove("hidden");
+    main.classList.add("hidden");
+  }
 }
 
 obterQuizzes();

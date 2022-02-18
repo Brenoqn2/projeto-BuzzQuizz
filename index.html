@@ -16,12 +16,14 @@
 
     <main>
       <section class="seus-quizzes">
-        <div class="header">
-          <h2 class="titulo">Seus Quizzes</h2>
-          <div class="icone-btn"><ion-icon name="add-circle"></ion-icon></div>
+        <div class="header hidden">
+          <h2 class="titulo hidden">Seus Quizzes</h2>
+          <div class="icone-btn hidden" onclick="criarQuizz()">
+            <ion-icon name="add-circle"></ion-icon>
+          </div>
         </div>
 
-        <div class="quizz" onclick="selecionarQuizz()">
+        <!-- <div class="quizz" onclick="selecionarQuizz()">
           <p class="quizz-titulo">Teste</p>
         </div>
 
@@ -31,11 +33,11 @@
 
         <div class="quizz" onclick="selecionarQuizz()">
           <p class="quizz-titulo">Teste</p>
-        </div>
+        </div> -->
 
         <div class="caixaQuizzesVazios" isCorrectAnswer="true">
           <p>Você não criou nenhum quizz ainda :(</p>
-          <button class="btn">Criar Quizz</button>
+          <button class="btn" onclick="criarQuizz()">Criar Quizz</button>
         </div>
       </section>
       <h2 class="titulo">Todos os Quizzes</h2>
@@ -88,6 +90,10 @@
           Voltar pra home
         </button>
       </div>
+    </aside>
+
+    <aside class="pagina-criar-quiz hidden">
+      <h2>Criar quiz</h2>
     </aside>
 
     <script
