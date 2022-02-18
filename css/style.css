@@ -11,6 +11,8 @@
   --cor-mensagem: #484848;
   --cor-texto-reiniciar: #fff5f4;
   --cor-texto-voltar: #818181;
+  --cor-input: #d1d1d1;
+  --cor-input-texto: #bababa;
 }
 
 * {
@@ -88,6 +90,7 @@ main {
   color: var(--cor-texto-box);
   border-radius: 5px;
   padding: 7px 45px;
+  font-family: "Roboto", sans-serif;
 
   display: flex;
   flex-direction: column;
@@ -108,6 +111,7 @@ main {
   font-size: 21px;
   line-height: 25px;
   margin: 33px 0;
+  font-family: "Roboto", sans-serif;
 
   background-color: transparent;
   outline: none;
@@ -294,11 +298,13 @@ main {
   color: var(--cor-mensagem);
 }
 
-.quiz-resultado .btn-reiniciar {
+.quiz-resultado .btn-reiniciar,
+.info-basica .btn-enviar {
   display: block;
   margin: 50px auto 0;
   padding: 16px 51px;
   background-color: var(--cor-principal);
+  font-family: "Roboto", sans-serif;
   font-size: 18px;
   border: none;
   outline: none;
@@ -318,6 +324,53 @@ main {
   font-size: 18px;
   color: var(--cor-texto-voltar);
   cursor: pointer;
+}
+
+.pagina-criar-quiz {
+  margin-top: 106px;
+}
+
+.container {
+  max-width: 600px;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.btn-container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.info-basica {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.info-basica form {
+  max-width: 600px;
+  width: 100%;
+  margin: 29px auto 0;
+}
+
+.info-basica form .container {
+  width: 100%;
+  padding: 24px 16px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+}
+
+.info-basica form input {
+  font-family: "Roboto", sans-serif;
+  width: 100%;
+  margin-top: 9px;
+  padding: 14px;
+  font-size: 19px;
+  border: 1px solid var(--cor-input);
+  border-radius: 5px;
+}
+
+.info-basica form input::placeholder {
+  color: var(--cor-input-texto);
+  font-style: italic;
 }
 
 @media screen and (min-width: 780px) {

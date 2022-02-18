@@ -214,6 +214,61 @@ function criarQuizz() {
     paginaCriarQuizz.classList.remove("hidden");
     main.classList.add("hidden");
   }
+
+  const quizCriar = paginaCriarQuizz.querySelector(".form-criar");
+  quizCriar.addEventListener("submit", (evento) => {
+    evento.preventDefault();
+    cadastrarQuiz();
+  });
+}
+
+function cadastrarQuiz() {
+  const paginaCriarQuizz = document.querySelector(".pagina-criar-quiz");
+  const quizCriar = paginaCriarQuizz.querySelector(".form-criar");
+
+  if (quizCriar) {
+    const titulo = quizCriar.querySelector(".titulo-quiz");
+    const url = quizCriar.querySelector(".url-imagem");
+    const qtdPerguntas = quizCriar.querySelector(".qtd-perguntas");
+    const qtdNiveis = quizCriar.querySelector(".qtd-niveis");
+    const quizEnviar = {
+      titulo: "",
+      url: "",
+      qtdP: "",
+      qtdN: "",
+    };
+
+    if (titulo.value.length >= 20 && titulo.value.length <= 65) {
+      quizEnviar.titulo = titulo.value;
+    } else {
+      alert("O título deve ter um tamanho de no mínimo 20 a 65 caracteres");
+    }
+
+    if (validarURL(url.value)) {
+      quizEnviar.url = url.value;
+    } else {
+      url.value = "";
+      alert("A URL da imagem não é válida!");
+    }
+
+    if (+qtdPerguntas.value >= 3) {
+      quizEnviar.qtdP = parseInt(qtdPerguntas.value);
+    } else {
+      alert("A quantidade mínima de perguntas é 3.");
+    }
+
+    if (+qtdNiveis.value >= 2) {
+      quizEnviar.qtdN = parseInt(qtdNiveis.value);
+    } else {
+      alert("A quantidade mínima de níveis é 2.");
+    }
+  }
+}
+
+function validarURL(url) {
+  return /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(
+    url
+  );
 }
 
 obterQuizzes();
