@@ -39,6 +39,7 @@ function renderizarQuizzes(quizzes) {
     if (arrSeusQuizzes && arrSeusQuizzes.includes(quiz.id)) {
       seusQuizzes.innerHTML += `
         <div class="quizz" style="${background}" onclick="selecionarQuizz(${quiz.id})">
+          <div class="degrade"></div>
           <p class="quizz-titulo">
             ${quiz.title}
           </p>
@@ -47,6 +48,7 @@ function renderizarQuizzes(quizzes) {
     } else {
       todosQuizzes.innerHTML += `
         <div class="quizz" style="${background}" onclick="selecionarQuizz(${quiz.id})">
+          <div class="degrade"></div>
           <p class="quizz-titulo">
             ${quiz.title}
           </p>

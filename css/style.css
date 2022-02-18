@@ -149,17 +149,31 @@ main {
   position: relative;
 }
 
+.quizz .degrade,
+.pagina-quizz .header .degrade {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(0, 0, 0, 0.5) 65.62%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: inherit;
+  border-radius: 6px;
+}
+
 .quizz .quizz-titulo {
   width: 90%;
-
   font-size: 19px;
   line-height: 22.27px;
   color: var(--cor-texto-hd);
-  word-break: break-all;
-
+  word-break: break-word;
   position: absolute;
-  left: 18px;
-  bottom: 10px;
+  left: 17px;
+  bottom: 17px;
 }
 
 .pagina-quizz {
