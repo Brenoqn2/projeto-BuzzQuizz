@@ -565,7 +565,6 @@ function validarURL(url) {
   );
 }
 
-<<<<<<< HEAD
 obterQuizzes();
 =======
 function armazenarQuiz(id) {
