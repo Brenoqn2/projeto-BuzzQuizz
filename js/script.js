@@ -1,5 +1,6 @@
 const URL_BASE = "https://mock-api.driven.com.br/api/v4/buzzquizz";
 const arrQuizzes = [];
+const arrSeusQuizzes = JSON.parse(localStorage.getItem("seusQuizzes"));
 let pontuacao = 0;
 let niveisQuizz = [];
 let pontuacaoMeta = 0;
@@ -20,11 +21,7 @@ function renderizarQuizzes(quizzes) {
 
   todosQuizzes.innerHTML = "";
 
-  if (!localStorage.getItem("seusQuizzes")) {
-    localStorage.setItem("seusQuizzes", JSON.stringify(null));
-  }
-
-  if (JSON.parse(localStorage.getItem("seusQuizzes"))) {
+  if (arrSeusQuizzes && arrSeusQuizzes.length) {
     caixasQuizzesVazios.classList.add("hidden");
 
     header.classList.remove("hidden");
@@ -39,13 +36,25 @@ function renderizarQuizzes(quizzes) {
     background: url(${quiz.image});
     `;
 
-    todosQuizzes.innerHTML += `
-    <div class="quizz" style="${background}" onclick="selecionarQuizz(${quiz.id})">
-      <p class="quizz-titulo">
-        ${quiz.title}
-      </p>
-    </div>
-    `;
+    if (arrSeusQuizzes && arrSeusQuizzes.includes(quiz.id)) {
+      seusQuizzes.innerHTML += `
+        <div class="quizz" style="${background}" onclick="selecionarQuizz(${quiz.id})">
+          <div class="degrade"></div>
+          <p class="quizz-titulo">
+            ${quiz.title}
+          </p>
+        </div>
+        `;
+    } else {
+      todosQuizzes.innerHTML += `
+        <div class="quizz" style="${background}" onclick="selecionarQuizz(${quiz.id})">
+          <div class="degrade"></div>
+          <p class="quizz-titulo">
+            ${quiz.title}
+          </p>
+        </div>
+      `;
+    }
   });
 }
 
@@ -112,11 +121,10 @@ function selecionarQuizz(id) {
   });
 
   let niveis = selecionado[0].levels;
-  let resultados = document.querySelector('.quiz-resultado');
-  resultados.innerHTML = '';
+  let resultados = document.querySelector(".quiz-resultado");
+  resultados.innerHTML = "";
   niveis.forEach((nivel) => {
-    let resultado = 
-    `
+    let resultado = `
     <div class = "nivel hidden" id="${nivel.title + nivel.minValue}">
       <div class="topo">
         <h3 class="texto">${nivel.title}</h3>
@@ -126,19 +134,18 @@ function selecionarQuizz(id) {
         <p class="mensagem">${nivel.text}</p>
       </section>
     </div>
-    `
-    resultados .innerHTML += resultado;
+    `;
+    resultados.innerHTML += resultado;
     valorNivel = {
       title: nivel.title + nivel.minValue,
-      minValue: nivel.minValue
+      minValue: nivel.minValue,
     };
     niveisQuizz.push(valorNivel);
   });
-  niveisQuizz.sort((a,b) => {
+  niveisQuizz.sort((a, b) => {
     return a.minValue - b.minValue;
   });
-  resultados.innerHTML += 
-   `
+  resultados.innerHTML += `
   <button class="btn-reiniciar" onclick="reiniciarQuizz()">
     Reiniciar Quizz
   </button>
@@ -161,7 +168,7 @@ function selecionarAlternativa(alternativaSelecionada) {
   }
   if (cont == 0) {
     alternativaSelecionada.classList.add("alternativaSelecionada");
-    if (alternativaSelecionada.classList.contains('certa')) {
+    if (alternativaSelecionada.classList.contains("certa")) {
       pontuacao++;
     }
     for (let i = 0; i < alternativas.length; i++) {
@@ -200,7 +207,7 @@ function selecionarAlternativa(alternativaSelecionada) {
     ).length;
 
     if (qtdPerguntasSelecionadas === perguntas.length) {
-      setTimeout(mostrarResultado,2000);
+      setTimeout(mostrarResultado, 2000);
     }
   }
 }
@@ -210,15 +217,15 @@ function mostrarResultado() {
   const pontos = Math.round((pontuacao/pontuacaoMeta)*100);
   let contador = 1;
   let nivelUsuario = null;
-  while(true){
+  while (true) {
     if (pontos >= niveisQuizz[niveisQuizz.length - contador].minValue) {
       nivelUsuario = niveisQuizz[niveisQuizz.length - contador].title;
       break;
-    };
+    }
     contador++;
   }
   nivelUsuario = document.getElementById(nivelUsuario);
-  nivelUsuario.classList.remove('hidden');
+  nivelUsuario.classList.remove("hidden");
 
   const quizResultado = paginaQuizz.querySelector(".quiz-resultado");
   quizResultado.classList.remove("hidden");
@@ -558,4 +565,25 @@ function validarURL(url) {
   );
 }
 
+<<<<<<< HEAD
 obterQuizzes();
+=======
+function armazenarQuiz(id) {
+  let seusQuizzes = JSON.parse(localStorage.getItem("seusQuizzes"));
+
+  if (typeof id === "number") {
+    seusQuizzes.push(id);
+  }
+
+  localStorage.setItem("seusQuizzes", JSON.stringify([...seusQuizzes]));
+}
+
+function inicializarLocalStorage() {
+  if (!arrSeusQuizzes) {
+    localStorage.setItem("seusQuizzes", JSON.stringify([]));
+  }
+}
+
+inicializarLocalStorage();
+obterQuizzes();
+>>>>>>> 5cd97fb202c65c1b253295a978cdcb9f997b86cd
