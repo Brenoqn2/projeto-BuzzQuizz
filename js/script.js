@@ -207,8 +207,7 @@ function selecionarAlternativa(alternativaSelecionada) {
 
 function mostrarResultado() {
   const paginaQuizz = document.querySelector(".pagina-quizz");
-  const pontos = Math.round(pontuacao/pontuacaoMeta)*100;
-  console.log(niveisQuizz);
+  const pontos = Math.round((pontuacao/pontuacaoMeta)*100);
   let contador = 1;
   let nivelUsuario = null;
   while(true){
@@ -223,7 +222,6 @@ function mostrarResultado() {
 
   const quizResultado = paginaQuizz.querySelector(".quiz-resultado");
   quizResultado.classList.remove("hidden");
-  console.log(pontos);
 
   quizResultado.scrollIntoView({ behavior: "smooth" });
 }
@@ -257,25 +255,33 @@ function criarQuizz() {
   });
 }
 
+let quizEnviar = {
+  titulo: "",
+  url: "",
+  qtdPerguntas: "",
+  qtdNiveis: "",
+}
+
 function cadastrarQuiz() {
   const paginaCriarQuizz = document.querySelector(".pagina-criar-quiz");
   const quizCriar = paginaCriarQuizz.querySelector(".form-criar");
-
+  quizEnviar = {
+    titulo: "",
+    url: "",
+    qtdPerguntas: "",
+    qtdNiveis: "", 
+  };
+  questions = [];
   if (quizCriar) {
     const titulo = quizCriar.querySelector(".titulo-quiz");
     const url = quizCriar.querySelector(".url-imagem");
     const qtdPerguntas = quizCriar.querySelector(".qtd-perguntas");
     const qtdNiveis = quizCriar.querySelector(".qtd-niveis");
-    const quizEnviar = {
-      titulo: "",
-      url: "",
-      qtdP: "",
-      qtdN: "",
-    };
 
     if (titulo.value.length >= 20 && titulo.value.length <= 65) {
       quizEnviar.titulo = titulo.value;
     } else {
+      titulo.value = "";
       alert("O título deve ter um tamanho de no mínimo 20 a 65 caracteres");
     }
 
@@ -287,17 +293,263 @@ function cadastrarQuiz() {
     }
 
     if (+qtdPerguntas.value >= 3) {
-      quizEnviar.qtdP = parseInt(qtdPerguntas.value);
+      quizEnviar.qtdPerguntas = parseInt(qtdPerguntas.value);
     } else {
+      qtdPerguntas.value = "";
       alert("A quantidade mínima de perguntas é 3.");
     }
 
     if (+qtdNiveis.value >= 2) {
-      quizEnviar.qtdN = parseInt(qtdNiveis.value);
+      quizEnviar.qtdNiveis = parseInt(qtdNiveis.value);
     } else {
+      qtdNiveis.value = "";
       alert("A quantidade mínima de níveis é 2.");
     }
   }
+}
+
+let questions = []
+
+function criarPerguntas(){
+  if (quizEnviar.titulo != "" && quizEnviar.url != "" && quizEnviar.qtdPerguntas != "" && quizEnviar.qtdNiveis != ""){
+    for (let i = 1 ; i < quizEnviar.qtdPerguntas + 1; i++) {
+      let pergunta = {
+        texto:"",
+        cor:"",
+        respostaCorreta:"",
+        urlImagemCorreta:"",
+        respostaIncorreta1:"",
+        urlImagemIncorreta1:"",
+        respostaIncorreta2:"",
+        urlImagemIncorreta2:"",
+        respostaIncorreta2:"",
+        urlImagemIncorreta2:"",
+        respostaIncorreta3:"",
+        urlImagemIncorreta3:"",
+        id:i
+      }
+      questions.push(pergunta);
+    }
+    perguntaAnterior=0;
+    preencherPerguntas();
+  }
+}
+
+let perguntaAnterior = 0;
+function preencherPerguntas(numeroPergunta = 1){
+  const paginaCriarQuizz = document.querySelector(".info-basica");
+  try{
+    var texto = document.getElementById('texto-pergunta').value
+    var cor = document.getElementById('cor-pergunta').value
+    var respostaCorreta = document.getElementById('resposta-correta').value
+    var urlImagemCorreta = document.getElementById('url-imagem').value
+    var respostaIncorreta1 = document.getElementById('resposta-incorreta1').value
+    var urlImagemIncorreta1 = document.getElementById('url-imagem1').value
+    var respostaIncorreta2 = document.getElementById('resposta-incorreta2').value
+    var urlImagemIncorreta2 = document.getElementById('url-imagem2').value
+    var respostaIncorreta3 = document.getElementById('resposta-incorreta3').value
+    var urlImagemIncorreta3 = document.getElementById('url-imagem3').value
+  }
+  catch(e){};
+  if (perguntaAnterior != 0){
+    let pergunta = questions.filter((pergunta) => pergunta.id === perguntaAnterior)[0]
+    pergunta.texto = texto;
+    pergunta.cor = cor.toUpperCase();
+    pergunta.respostaCorreta = respostaCorreta;
+    pergunta.urlImagemCorreta = urlImagemCorreta;
+    pergunta.respostaIncorreta1 = respostaIncorreta1;
+    pergunta.urlImagemIncorreta1 = urlImagemIncorreta1;
+    pergunta.respostaIncorreta2 = respostaIncorreta2;
+    pergunta.urlImagemIncorreta2 = urlImagemIncorreta2;
+    pergunta.respostaIncorreta2 = respostaIncorreta2;
+    pergunta.urlImagemIncorreta2 = urlImagemIncorreta2;
+    pergunta.respostaIncorreta3 = respostaIncorreta3;
+    pergunta.urlImagemIncorreta3 = urlImagemIncorreta3;
+  }
+  perguntaAnterior = numeroPergunta;
+  paginaCriarQuizz.innerHTML = 
+  `
+  <h2 class = "titulo container">Crie suas perguntas</h2>
+  `;
+  for (let i = 1 ; i < quizEnviar.qtdPerguntas + 1; i++) {
+    if (i < numeroPergunta){
+      paginaCriarQuizz.innerHTML+=
+      `
+      <div class="caixaEditarPergunta" onclick="preencherPerguntas(${i})">
+        <h3 class="titulo-input">Pergunta ${i}</h3>
+        <ion-icon name="create-outline"></ion-icon>
+      </div>
+      `
+    }
+    else if (i == numeroPergunta){
+      paginaCriarQuizz.innerHTML += 
+      `
+      <form class ="form-criar criar-perguntas" >
+        <div class="container">
+          <div>
+            <h3 class="titulo-input">Pergunta ${numeroPergunta}</h3>
+            <input type="text" id="texto-pergunta" placeholder="Texto da pergunta" required />
+            <input type="text" id="cor-pergunta" placeholder="Cor de fundo da pergunta" required />
+          </div>
+  
+          <div>
+            <h3 class="titulo-input">Resposta correta</h3>
+            <input type="text" id="resposta-correta" placeholder="Resposta Correta" required />
+            <input type="text" id="url-imagem" placeholder="URL da imagem" required />
+          </div>
+  
+          <div>
+            <h3 class="titulo-input">Respostas incorretas</h3>
+            <input type="text" id="resposta-incorreta1" placeholder="Resposta incorreta 1" required />
+            <input type="text" id="url-imagem1" placeholder="URL da imagem 1" required />
+          </div>
+  
+          <div>
+            <input type="text" id="resposta-incorreta2" placeholder="Resposta incorreta 2" />
+            <input type="text" id="url-imagem2" placeholder="URL da imagem 2" />
+          </div> 
+  
+          <div>
+            <input type="text" id="resposta-incorreta3" placeholder="Resposta incorreta 3" />
+            <input type="text" id="url-imagem3" placeholder="URL da imagem 3" />
+          </div>
+        </div>
+      </form>
+      `
+    }
+    else{
+      paginaCriarQuizz.innerHTML+=
+      `
+      <div class="caixaEditarPergunta" onclick="preencherPerguntas(${i})">
+        <h3 class="titulo-input">Pergunta ${i}</h3>
+        <ion-icon name="create-outline"></ion-icon>
+      </div>
+      ` 
+    }
+
+    if (i == quizEnviar.qtdPerguntas) {
+      paginaCriarQuizz.innerHTML += 
+      `
+      <div class="btn-container" >
+        <button class="btn-enviar" onclick="criarNiveis()" style="margin-top:0px;">
+          Prosseguir pra criar níveis
+        </button>
+      </div>
+      `
+    }
+  }
+  let pergunta = questions.filter((pergunta) => pergunta.id === numeroPergunta)[0];
+  document.getElementById('texto-pergunta').value = pergunta.texto;
+  document.getElementById('cor-pergunta').value = pergunta.cor;
+  document.getElementById('resposta-correta').value = pergunta.respostaCorreta;
+  document.getElementById('url-imagem').value = pergunta.urlImagemCorreta;
+  document.getElementById('resposta-incorreta1').value = pergunta.respostaIncorreta1;
+  document.getElementById('url-imagem1').value = pergunta.urlImagemIncorreta1;
+  document.getElementById('resposta-incorreta2').value = pergunta.respostaIncorreta2;
+  document.getElementById('url-imagem2').value = pergunta.urlImagemIncorreta2;
+  document.getElementById('resposta-incorreta3').value = pergunta.respostaIncorreta3;
+  document.getElementById('url-imagem3').value = pergunta.urlImagemIncorreta3;
+  document.querySelector('.container').scrollIntoView({behavior:'smooth'});
+}
+
+function criarNiveis(){
+  let texto = document.getElementById('texto-pergunta').value
+  let cor = document.getElementById('cor-pergunta').value
+  let respostaCorreta = document.getElementById('resposta-correta').value
+  let urlImagemCorreta = document.getElementById('url-imagem').value
+  let respostaIncorreta1 = document.getElementById('resposta-incorreta1').value
+  let urlImagemIncorreta1 = document.getElementById('url-imagem1').value
+  let respostaIncorreta2 = document.getElementById('resposta-incorreta2').value
+  let urlImagemIncorreta2 = document.getElementById('url-imagem2').value
+  let respostaIncorreta3 = document.getElementById('resposta-incorreta3').value
+  let urlImagemIncorreta3 = document.getElementById('url-imagem3').value
+
+  let pergunta = questions.filter((pergunta) => pergunta.id === perguntaAnterior)[0]
+  pergunta.texto = texto;
+  pergunta.cor = cor.toUpperCase();
+  pergunta.respostaCorreta = respostaCorreta;
+  pergunta.urlImagemCorreta = urlImagemCorreta;
+  pergunta.respostaIncorreta1 = respostaIncorreta1;
+  pergunta.urlImagemIncorreta1 = urlImagemIncorreta1;
+  pergunta.respostaIncorreta2 = respostaIncorreta2;
+  pergunta.urlImagemIncorreta2 = urlImagemIncorreta2;
+  pergunta.respostaIncorreta2 = respostaIncorreta2;
+  pergunta.urlImagemIncorreta2 = urlImagemIncorreta2;
+  pergunta.respostaIncorreta3 = respostaIncorreta3;
+  pergunta.urlImagemIncorreta3 = urlImagemIncorreta3;
+  for (let i = 0; i<questions.length;i++){
+    if (questions[i].texto.length < 20){
+      alert('O título da pergunta deve ter mais de 20 caracteres!');
+      preencherPerguntas(questions[i].id)
+      let titulo = document.getElementById('texto-pergunta');
+      titulo.value = "";
+      titulo.setAttribute('style','border: 1px solid red');
+      break;
+    }
+
+    if (!(validarHexadecimal(questions[i].cor))){
+      alert ('Insira uma cor Hexadecimal válida!');
+      preencherPerguntas(questions[i].id);
+      let cor = document.getElementById('cor-pergunta');
+      cor.value ="";
+      cor.setAttribute('style','border: 1px solid red');
+      break;
+    }
+
+    if (!questions[i].respostaCorreta){
+      alert('O texto da resposta não pode estar vazio!')
+      preencherPerguntas(questions[i].id);
+      let texto = document.getElementById('resposta-correta');
+      texto.value = "";
+      texto.setAttribute('style','border: 1px solid red');
+      break;
+    }
+
+    if (!questions[i].respostaIncorreta1){
+      alert('O texto da resposta não pode estar vazio!')
+      preencherPerguntas(questions[i].id);
+      let texto = document.getElementById('resposta-incorreta1');
+      texto.value = "";
+      texto.setAttribute('style','border: 1px solid red');
+      break;
+    }
+
+    if(!validarURL(questions[i].urlImagemCorreta)){
+      alert('Insira uma URL válida!');
+      preencherPerguntas(questions[i].id);
+      let url = document.getElementById('url-imagem');
+      url.value = "";
+      url.setAttribute('style','border: 1px solid red');
+      break;
+    }
+
+    if(!validarURL(questions[i].urlImagemIncorreta1)){
+      alert('Insira uma URL válida!');
+      preencherPerguntas(questions[i].id);
+      let url = document.getElementById('url-imagem1');
+      url.value = "";
+      url.setAttribute('style','border: 1px solid red');
+      break;
+    }
+  }
+}
+
+function validarHexadecimal(hex){
+  if (hex[0] != '#'){
+    return false;
+  }
+
+  if (hex.length != 7){
+    return false;
+  }
+
+  for (let i = 1; i < hex.length; i++){
+    const ch = hex[i];
+    if ((!(isNaN(ch)) && (ch < '0' || ch > '9')) || (isNaN(ch) && (ch < 'A' || ch > 'F'))) {
+      return false;
+    }
+  }
+  return true;
 }
 
 function validarURL(url) {

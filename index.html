@@ -22,7 +22,6 @@
             <ion-icon name="add-circle"></ion-icon>
           </div>
         </div>
-
         <!-- <div class="quizz" onclick="selecionarQuizz()">
           <p class="quizz-titulo">Teste</p>
         </div>
@@ -96,7 +95,7 @@
       <section class="info-basica">
         <h2 class="titulo container">Comece pelo começo</h2>
 
-        <form class="form-criar">
+        <form class="form-criar" onsubmit="setTimeout(criarPerguntas,200)">
           <div class="container">
             <div>
               <input type="text" class="titulo-quiz" placeholder="Título do seu quizz" required/>
@@ -112,7 +111,7 @@
             </div>
           </div>
           <div class="btn-container">
-            <button type="submit" class="btn-enviar">
+            <button class="btn-enviar" type="submit">
               Prosseguir pra criar perguntas
             </button>
           </div>
