@@ -459,7 +459,21 @@ function preencherPerguntas(numeroPergunta = 1){
   document.querySelector('.container').scrollIntoView({behavior:'smooth'});
 }
 
+let levels = [];
+let nivelAnterior = 0;
+
 function criarNiveis(){
+  for (let i = 1 ; i < quizEnviar.qtdNiveis + 1; i++) {
+    let level = {
+      title:"",
+      image:"",
+      text:"",
+      minValue:"",
+      id:i
+    }
+    levels.push(level);
+  }
+  nivelAnterior=0;
   let texto = document.getElementById('texto-pergunta').value
   let cor = document.getElementById('cor-pergunta').value
   let respostaCorreta = document.getElementById('resposta-correta').value
@@ -471,7 +485,7 @@ function criarNiveis(){
   let respostaIncorreta3 = document.getElementById('resposta-incorreta3').value
   let urlImagemIncorreta3 = document.getElementById('url-imagem3').value
 
-  let pergunta = questions.filter((pergunta) => pergunta.id === perguntaAnterior)[0]
+  let pergunta = questions.filter((pergunta) => pergunta.id === perguntaAnterior)[0];
   pergunta.texto = texto;
   pergunta.cor = cor.toUpperCase();
   pergunta.respostaCorreta = respostaCorreta;
@@ -484,6 +498,163 @@ function criarNiveis(){
   pergunta.urlImagemIncorreta2 = urlImagemIncorreta2;
   pergunta.respostaIncorreta3 = respostaIncorreta3;
   pergunta.urlImagemIncorreta3 = urlImagemIncorreta3;
+  preencherNiveis();
+}
+
+function preencherNiveis(numeroNivel = 1){
+  if (validarPerguntas()){
+    const paginaCriarQuizz = document.querySelector(".info-basica");
+    if (nivelAnterior == 0){
+      paginaCriarQuizz.innerHTML = "";
+    }
+    if (nivelAnterior != 0){
+      var title = document.getElementById('titulo-nivel').value
+      var image = document.getElementById('imagem-nivel').value
+      var text = document.getElementById('texto-nivel').value
+      var minValue = document.getElementById('valor-nivel').value
+    }
+    if (nivelAnterior != 0){
+      let level = levels.filter((level) => level.id === nivelAnterior)[0];
+      console.log(level);
+      level.text = text;
+      level.image = image
+      level.title = title;
+      level.minValue = minValue;
+    }
+    paginaCriarQuizz.innerHTML = 
+    `
+    <h2 class = "titulo container">Agora, decida os níveis!</h2>
+    `;
+    for (let i = 1 ; i < quizEnviar.qtdNiveis + 1; i++) {
+      if (i < numeroNivel){
+        paginaCriarQuizz.innerHTML+=
+        `
+        <div class="caixaEditarPergunta" onclick="preencherNiveis(${i})">
+          <h3 class="titulo-input">Nível ${i}</h3>
+          <ion-icon name="create-outline"></ion-icon>
+        </div>
+        `
+      }
+      else if (i == numeroNivel){
+        paginaCriarQuizz.innerHTML += 
+        `
+        <form class ="form-criar criar-perguntas" >
+          <div class="container">
+            <div>
+              <h3 class="titulo-input">Nível ${numeroNivel}</h3>
+              <input type="text" id="titulo-nivel" placeholder="Título do nível" />
+              <input type="text" id="valor-nivel" placeholder="% de acerto mínima" />
+              <input type="text" id="imagem-nivel" placeholder="URL da imagem do nível" />
+              <input type="text" id="texto-nivel" placeholder="Descrição do nível" />
+            </div>
+          </div>
+        </form>
+        `
+      }
+      else{
+        paginaCriarQuizz.innerHTML+=
+        `
+        <div class="caixaEditarPergunta" onclick="preencherNiveis(${i})">
+          <h3 class="titulo-input">Nível ${i}</h3>
+          <ion-icon name="create-outline"></ion-icon>
+        </div>
+        ` 
+      }
+  
+      if (i == quizEnviar.qtdNiveis) {
+        paginaCriarQuizz.innerHTML += 
+        `
+        <div class="btn-container" >
+          <button class="btn-enviar" onclick="finalizarQuizz()" style="margin-top:0px;">
+            Finalizar Quizz
+          </button>
+        </div>
+        `
+      }
+    }
+
+    if (nivelAnterior != 0){
+      let level = levels.filter((level) => level.id === numeroNivel)[0];
+      console.log(level);
+      document.getElementById('titulo-nivel').value = level.title;
+      document.getElementById('imagem-nivel').value = level.image;
+      document.getElementById('valor-nivel').value = level.minValue;
+      document.getElementById('texto-nivel').value = level.text;
+      document.querySelector('.container').scrollIntoView({behavior:'smooth'});
+    }
+    nivelAnterior = numeroNivel;
+  }
+}
+
+function finalizarQuizz() {
+  let title = document.getElementById('titulo-nivel').value
+  let image = document.getElementById('imagem-nivel').value
+  let text = document.getElementById('texto-nivel').value
+  let minValue = document.getElementById('valor-nivel').value
+  let level = levels.filter((level) => level.id === nivelAnterior)[0];
+  console.log(level);
+  level.text = text;
+  level.image = image
+  level.title = title;
+  level.minValue = minValue;
+
+  if(validarNiveis()){
+    console.log('passou!');
+  }
+}
+
+function validarNiveis() {
+  for (let i = 0; i<levels.length;i++){
+    if (levels[i].title.length < 10){
+      alert('O título do nível deve ter mais de 10 caracteres!');
+      preencherNiveis(levels[i].id)
+      let titulo = document.getElementById('titulo-nivel');
+      titulo.value = "";
+      titulo.setAttribute('style','border: 1px solid red');
+      return false;
+    }
+
+    else if (isNaN(levels[i].minValue) || (!(isNaN(levels[i].minValue)) && (levels[i].minValue < 0 || levels[i].minValue > 100))){
+      alert ('Insira uma porcentagem válida!');
+      preencherNiveis(levels[i].id);
+      let porcentagem = document.getElementById('valor-nivel');
+      porcentagem.value ="";
+      porcentagem.setAttribute('style','border: 1px solid red');
+      return false;
+    }
+
+    else if(!validarURL(levels[i].image)){
+      alert('Insira uma URL válida!');
+      preencherNiveis(levels[i].id);
+      let url = document.getElementById('imagem-nivel');
+      url.value = "";
+      url.setAttribute('style','border: 1px solid red');
+      return false;
+    }
+
+    else if(levels[i].text.length < 30){
+      alert('A descrição do nível deve ter mais de 30 caracteres!');
+      preencherNiveis(levels[i].id);
+      let texto = document.getElementById('texto-nivel');
+      texto.value = "";
+      texto.setAttribute('style','border: 1px solid red');
+      return false;
+    }
+  let cont = 0;
+  levels.forEach((level) => {
+    if (level.minValue == 0){
+      cont++;
+    }
+  });
+  if (cont == 0){
+    alert ('Deve existir pelo menos 1 nível com 0% de acerto');
+    return false;
+  }
+  }
+  return true;
+}
+
+function validarPerguntas(){
   for (let i = 0; i<questions.length;i++){
     if (questions[i].texto.length < 20){
       alert('O título da pergunta deve ter mais de 20 caracteres!');
@@ -491,54 +662,55 @@ function criarNiveis(){
       let titulo = document.getElementById('texto-pergunta');
       titulo.value = "";
       titulo.setAttribute('style','border: 1px solid red');
-      break;
+      return false;
     }
 
-    if (!(validarHexadecimal(questions[i].cor))){
+    else if (!(validarHexadecimal(questions[i].cor))){
       alert ('Insira uma cor Hexadecimal válida!');
       preencherPerguntas(questions[i].id);
       let cor = document.getElementById('cor-pergunta');
       cor.value ="";
       cor.setAttribute('style','border: 1px solid red');
-      break;
+      return false;
     }
 
-    if (!questions[i].respostaCorreta){
+    else if (!questions[i].respostaCorreta){
       alert('O texto da resposta não pode estar vazio!')
       preencherPerguntas(questions[i].id);
       let texto = document.getElementById('resposta-correta');
       texto.value = "";
       texto.setAttribute('style','border: 1px solid red');
-      break;
+      return false;
     }
 
-    if (!questions[i].respostaIncorreta1){
+    else if (!questions[i].respostaIncorreta1){
       alert('O texto da resposta não pode estar vazio!')
       preencherPerguntas(questions[i].id);
       let texto = document.getElementById('resposta-incorreta1');
       texto.value = "";
       texto.setAttribute('style','border: 1px solid red');
-      break;
+      return false;
     }
 
-    if(!validarURL(questions[i].urlImagemCorreta)){
+    else if(!validarURL(questions[i].urlImagemCorreta)){
       alert('Insira uma URL válida!');
       preencherPerguntas(questions[i].id);
       let url = document.getElementById('url-imagem');
       url.value = "";
       url.setAttribute('style','border: 1px solid red');
-      break;
+      return false;
     }
 
-    if(!validarURL(questions[i].urlImagemIncorreta1)){
+    else if(!validarURL(questions[i].urlImagemIncorreta1)){
       alert('Insira uma URL válida!');
       preencherPerguntas(questions[i].id);
       let url = document.getElementById('url-imagem1');
       url.value = "";
       url.setAttribute('style','border: 1px solid red');
-      break;
+      return false;
     }
   }
+  return true;
 }
 
 function validarHexadecimal(hex){
