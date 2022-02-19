@@ -565,8 +565,6 @@ function validarURL(url) {
   );
 }
 
-obterQuizzes();
-=======
 function armazenarQuiz(id) {
   let seusQuizzes = JSON.parse(localStorage.getItem("seusQuizzes"));
 
@@ -585,4 +583,3 @@ function inicializarLocalStorage() {
 
 inicializarLocalStorage();
 obterQuizzes();
->>>>>>> 5cd97fb202c65c1b253295a978cdcb9f997b86cd
