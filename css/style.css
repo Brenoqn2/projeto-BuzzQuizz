@@ -334,7 +334,7 @@ main {
   cursor: pointer;
 }
 
-.quiz-resultado .btn-voltar {
+.btn-voltar {
   display: block;
   margin: 0 auto 0;
   padding: 16px 30px;
@@ -447,6 +447,15 @@ h3{
   top:27px;
   right:17px;
   font-size:26px;
+}
+
+.info-basica .quizz{
+  margin: 29px auto 24px;
+
+}
+
+.info-basica .btn-container{
+  margin:0 auto 0;
 }
 
 .hidden {

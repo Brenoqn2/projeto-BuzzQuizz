@@ -10,52 +10,82 @@ function obterQuizzes() {
   const URL = `${URL_BASE}/quizzes`;
   const req = axios.get(URL);
 
-  req.then((res) => renderizarQuizzes(res.data));
-}
+  req.then((res) => {
+    renderizarQuizzes(res.data)
+  });
+  req.catch(() => {
+    alert('Erro ao obter os quizzes!')
+    obterQuizzes();
+  });
+};
 
 function renderizarQuizzes(quizzes) {
-  const seusQuizzes = document.querySelector(".seus-quizzes");
-  const todosQuizzes = document.querySelector(".todos-quizzes");
-  const caixasQuizzesVazios = seusQuizzes.querySelector(".caixaQuizzesVazios");
-  const header = seusQuizzes.querySelector(".header");
-
-  todosQuizzes.innerHTML = "";
-
-  if (arrSeusQuizzes && arrSeusQuizzes.length) {
-    caixasQuizzesVazios.classList.add("hidden");
-
-    header.classList.remove("hidden");
-    header.children[0].classList.remove("hidden");
-    header.children[1].classList.remove("hidden");
+  quizzes.forEach((quiz) => {arrQuizzes.push(quiz)});
+  let quizCriado = sessionStorage.getItem('quizCriado');
+  if (quizCriado) {
+    sessionStorage.removeItem('quizCriado');
+    selecionarQuizz(arrSeusQuizzes[arrSeusQuizzes.length - 1]);
   }
 
-  quizzes.forEach((quiz) => {
-    arrQuizzes.push(quiz);
+  else{
+    const seusQuizzes = document.querySelector(".seus-quizzes");
+    const todosQuizzes = document.querySelector(".todos-quizzes");
+    const caixasQuizzesVazios = seusQuizzes.querySelector(".caixaQuizzesVazios");
+    const header = seusQuizzes.querySelector(".header");
 
-    const background = `
-    background: url(${quiz.image});
-    `;
+    todosQuizzes.innerHTML = "";
 
-    if (arrSeusQuizzes && arrSeusQuizzes.includes(quiz.id)) {
-      seusQuizzes.innerHTML += `
-        <div class="quizz" style="${background}" onclick="selecionarQuizz(${quiz.id})">
-          <div class="degrade"></div>
-          <p class="quizz-titulo">
-            ${quiz.title}
-          </p>
-        </div>
-        `;
-    } else {
-      todosQuizzes.innerHTML += `
-        <div class="quizz" style="${background}" onclick="selecionarQuizz(${quiz.id})">
-          <div class="degrade"></div>
-          <p class="quizz-titulo">
-            ${quiz.title}
-          </p>
-        </div>
-      `;
+    if (arrSeusQuizzes && arrSeusQuizzes.length) {
+      caixasQuizzesVazios.classList.add("hidden");
+
+      header.classList.remove("hidden");
+      header.children[0].classList.remove("hidden");
+      header.children[1].classList.remove("hidden");
     }
-  });
+
+    quizzes.forEach((quiz) => {
+      const background = `
+      background: url(${quiz.image});
+      `;
+
+      if (arrSeusQuizzes && arrSeusQuizzes.includes(quiz.id)) {
+        seusQuizzes.innerHTML += `
+          <div class="quizz" style="${background}" onclick="selecionarQuizz(${quiz.id})">
+            <div class="degrade"></div>
+            <p class="quizz-titulo">
+              ${quiz.title}
+            </p>
+          </div>
+          `;
+      } else {
+        todosQuizzes.innerHTML += `
+          <div class="quizz" style="${background}" onclick="selecionarQuizz(${quiz.id})">
+            <div class="degrade"></div>
+            <p class="quizz-titulo">
+              ${quiz.title}
+            </p>
+          </div>
+        `;
+      }
+    });
+  }
+}
+
+function renderizarQuizCriado(quiz){
+  const background = `
+  background: url(${quiz.image});
+  `;
+  const paginaCriarQuizz = document.querySelector(".info-basica");
+  paginaCriarQuizz.innerHTML +=`
+    <div class="quizz" style="${background}" onclick="selecionarQuizzCriado()">
+      <div class="degrade"></div>
+      <p class="quizz-titulo">
+        ${quiz.title}
+      </p>
+    </div>
+  `;
+
+
 }
 
 function selecionarQuizz(id) {
@@ -149,7 +179,7 @@ function selecionarQuizz(id) {
   <button class="btn-reiniciar" onclick="reiniciarQuizz()">
     Reiniciar Quizz
   </button>
-  <button class="btn-voltar" onclick="voltarParaHome()">
+  <button class="btn-voltar" onclick="window.location.reload()">
     Voltar pra home
   </button>
   `;
@@ -235,15 +265,6 @@ function mostrarResultado() {
 
 function reiniciarQuizz() {
   selecionarQuizz(quizzSelecionado);
-}
-
-function voltarParaHome() {
-  const main = document.querySelector("main");
-  const paginaQuiz = document.querySelector(".pagina-quizz");
-
-  window.scrollTo(0, 0);
-  main.classList.remove("hidden");
-  paginaQuiz.classList.add("hidden");
 }
 
 function criarQuizz() {
@@ -592,15 +613,102 @@ function finalizarQuizz() {
   let text = document.getElementById('texto-nivel').value
   let minValue = document.getElementById('valor-nivel').value
   let level = levels.filter((level) => level.id === nivelAnterior)[0];
-  console.log(level);
   level.text = text;
   level.image = image
   level.title = title;
   level.minValue = minValue;
 
   if(validarNiveis()){
-    console.log('passou!');
+    let quizzCompleto = {
+      title:quizEnviar.titulo,
+      image:quizEnviar.url,
+      questions:[],
+      levels:[]
+    };
+
+    questions.forEach((question) => {
+      if (question.respostaIncorreta2 == "" || question.urlImagemIncorreta2 == "" || !(validarURL(question.urlImagemIncorreta2))){
+        question.respostaIncorreta2 = "";
+        question.urlImagemIncorreta2 = "";
+      }
+
+      if (question.respostaIncorreta3 == "" || question.urlImagemIncorreta3 == "" || !(validarURL(question.urlImagemIncorreta3))){
+        question.respostaIncorreta3 = "";
+        question.urlImagemIncorreta3 = "";
+      }
+    })
+    
+    questions.forEach((question) => {
+      let obj = {
+        title: question.texto,
+        color: question.cor,
+        answers: [
+          {
+            text:question.respostaCorreta,
+            image:question.urlImagemCorreta,
+            isCorrectAnswer: true
+          },
+          {
+            text:question.respostaIncorreta1,
+            image:question.urlImagemIncorreta1,
+            isCorrectAnswer:false
+          }
+        ]
+      }
+
+      if (question.respostaIncorreta2){
+        obj.answers.push({text:question.respostaIncorreta2, image:question.urlImagemIncorreta2, isCorrectAnswer:false});
+      }
+
+      if (question.respostaIncorreta3){
+        obj.answers.push({text:question.respostaIncorreta3, image:question.urlImagemIncorreta3, isCorrectAnswer:false});
+      }
+      quizzCompleto.questions.push(obj);
+    });
+
+    levels.forEach((level) => {
+      let obj = {
+        title:level.title,
+        image:level.image,
+        text:level.text,
+        minValue:parseInt(level.minValue)
+      }
+      quizzCompleto.levels.push(obj);
+    });
+
+    console.log(quizzCompleto);
+    let promise = axios.post(`${URL_BASE}/quizzes`,quizzCompleto);
+    promise.then((res) => {
+      let quizzID = res.data.id;
+      arrQuizzes.push()
+      armazenarQuiz(quizzID);
+      const paginaCriarQuizz = document.querySelector(".info-basica");
+      paginaCriarQuizz.innerHTML = 
+      `
+      <h2 class = "titulo container">Seu quizz está pronto!</h2>
+      `;
+      renderizarQuizCriado(res.data);
+      paginaCriarQuizz.innerHTML += 
+      `
+      <div class="btn-container" >
+        <button class="btn-enviar" onclick="selecionarQuizzCriado()" style="margin-top:0px;">
+          Acessar Quizz
+        </button>
+      </div>
+
+      <button class="btn-voltar" onclick="window.location.reload()">
+        Voltar pra home
+      </button>
+      `
+
+    });
+    promise.catch(() => console.log('ERRO! Tente enviar novamente'));
   }
+}
+
+function selecionarQuizzCriado() {
+  sessionStorage.setItem('quizCriado','true');
+  window.location.reload();
 }
 
 function validarNiveis() {
