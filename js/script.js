@@ -34,6 +34,28 @@ function renderizarQuizzes(quizzes) {
     const header = seusQuizzes.querySelector(".header");
 
     todosQuizzes.innerHTML = "";
+    try{
+      arrSeusQuizzes.forEach((seuQuiz) => {
+        let cont = 0;
+        for (let i = 0; i<arrQuizzes.length; i++){
+          if (arrQuizzes[i].id == seuQuiz.id) {
+            cont++;
+          }
+        }
+        if (cont == 0) {
+          arrSeusQuizzes.pop(seuQuiz);
+        }
+      });
+    }
+    catch(e){};
+
+    if (arrSeusQuizzes && arrSeusQuizzes.length) {
+      caixasQuizzesVazios.classList.add("hidden");
+
+      header.classList.remove("hidden");
+      header.children[0].classList.remove("hidden");
+      header.children[1].classList.remove("hidden");
+    }
 
     quizzes.forEach((quiz) => {
       const background = `
