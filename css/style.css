@@ -23,6 +23,7 @@ body {
   font-family: "Roboto", sans-serif;
   background-color: var(--cor-bg);
   scroll-behavior: smooth;
+  position: relative;
 }
 
 header {
@@ -36,7 +37,7 @@ header {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 2;
+  z-index: 5;
 }
 
 header h1 {
@@ -173,6 +174,53 @@ main {
   position: absolute;
   left: 17px;
   bottom: 17px;
+}
+
+.quizz .imagem-quiz {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.quizz .quiz-opcoes {
+  width: 43px;
+  height: 87px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  background-color: var(--cor-principal);
+  padding-top: 5px;
+
+  position: absolute;
+  top: 9px;
+  right: 0;
+  z-index: 3;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.quiz-opcoes .editar,
+.quiz-opcoes .deletar {
+  color: var(--cor-texto-hd);
+  font-size: 25px;
+  width: 100%;
+  padding: 5px 0;
+  transition: filter 0.3s ease;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.quiz-opcoes .deletar {
+  margin-top: 5px;
+}
+
+.quiz-opcoes .editar:hover,
+.quiz-opcoes .deletar:hover {
+  filter: brightness(0.3);
 }
 
 .pagina-quizz {
@@ -394,72 +442,136 @@ main {
   font-style: italic;
 }
 
-.criar-perguntas .container div{
-  position:relative;
-  margin-bottom:60px;
+.criar-perguntas .container div {
+  position: relative;
+  margin-bottom: 60px;
 }
 
-h3{
+h3 {
   font-style: normal;
   font-weight: bold;
   font-size: 20px;
   line-height: 23px;
 }
 
-.criar-perguntas .container div h3{
-  position:absolute;
-  left:0px;
-  top:-34px;
+.criar-perguntas .container div h3 {
+  position: absolute;
+  left: 0px;
+  top: -34px;
 }
 
-.criar-perguntas .container div:nth-child(3){
-  margin-bottom:32px;
+.criar-perguntas .container div:nth-child(3) {
+  margin-bottom: 32px;
 }
 
-.criar-perguntas .container div:nth-child(4){
-  margin-bottom:32px;
+.criar-perguntas .container div:nth-child(4) {
+  margin-bottom: 32px;
 }
 
-.criar-perguntas .container div:nth-child(4){
-  margin-bottom:32px;
+.criar-perguntas .container div:nth-child(4) {
+  margin-bottom: 32px;
 }
 
-.criar-perguntas .container div:nth-child(5){
-  margin-bottom:0px;
+.criar-perguntas .container div:nth-child(5) {
+  margin-bottom: 0px;
 }
 
-.caixaEditarPergunta{
-  position:relative;
-  width:100%;
-  height:74px;
-  margin:0 auto 30px;
-  max-width:600px;
+.caixaEditarPergunta {
+  position: relative;
+  width: 100%;
+  height: 74px;
+  margin: 0 auto 30px;
+  max-width: 600px;
 }
 
-.caixaEditarPergunta h3{
-  position:absolute;
-  top:27px;
-  left:17px;
+.caixaEditarPergunta h3 {
+  position: absolute;
+  top: 27px;
+  left: 17px;
 }
 
-.caixaEditarPergunta ion-icon{
-  position:absolute;
-  top:27px;
-  right:17px;
-  font-size:26px;
+.caixaEditarPergunta ion-icon {
+  position: absolute;
+  top: 27px;
+  right: 17px;
+  font-size: 26px;
 }
 
-.info-basica .quizz{
+.info-basica .quizz {
   margin: 29px auto 24px;
-
 }
 
-.info-basica .btn-container{
-  margin:0 auto 0;
+.info-basica .btn-container {
+  margin: 0 auto 0;
 }
 
 .hidden {
   display: none;
+}
+
+.caixa-alerta {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  height: calc(100% + 100px);
+  position: absolute;
+  z-index: 7;
+  top: -100px;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.caixa-alerta main {
+  position: fixed;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 80%;
+  height: 30%;
+  background-color: #fafafa;
+  border-radius: 6px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.caixa-alerta main .container {
+  margin-top: 30px;
+
+  display: flex;
+  justify-content: center;
+}
+
+.caixa-alerta main .container .confirmar {
+  background-color: #009c22;
+  border: none;
+  color: var(--cor-texto-hd);
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 18px;
+  font-weight: 500;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: filter 0.3s ease;
+}
+
+.caixa-alerta main .container .desistir {
+  background-color: var(--cor-principal);
+  border: none;
+  color: var(--cor-texto-hd);
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 18px;
+  font-weight: 500;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: filter 0.3s ease;
+}
+
+.caixa-alerta main .container .confirmar:hover,
+.caixa-alerta main .container .desistir:hover {
+  filter: brightness(0.9);
 }
 
 @media screen and (min-width: 780px) {
