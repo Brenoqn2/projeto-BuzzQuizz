@@ -526,6 +526,7 @@ h3 {
   left: 50%;
   transform: translateX(-50%);
 
+  max-width: 450px;
   width: 80%;
   height: 30%;
   background-color: #fafafa;
