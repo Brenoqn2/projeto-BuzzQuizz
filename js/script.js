@@ -12,11 +12,21 @@ function obterQuizzes() {
 
   req.then((res) => {
     renderizarQuizzes(res.data);
+    esconderLoader();
   });
   req.catch(() => {
     alert("Erro ao obter os quizzes!");
     obterQuizzes();
   });
+}
+
+function obterUmQuiz(id) {
+  mostrarLoader();
+
+  const req = axios.get(`${URL_BASE}/quizzes/${id}`);
+
+  req.then(({ data }) => selecionarQuizz(id, [data]));
+  req.catch(() => alert("Houve um erro no carregamento do quiz"));
 }
 
 function renderizarQuizzes(quizzes) {
@@ -63,7 +73,7 @@ function renderizarQuizzes(quizzes) {
 
       if (arrSeusQuizzes && estaEmSeusQuizzes) {
         seusQuizzes.innerHTML += `
-          <article class="quizz" onclick="selecionarQuizz(${quiz.id})">
+          <article class="quizz" onclick="obterUmQuiz(${quiz.id})">
             <img src="${quiz.image}" class="imagem-quiz"/>
             <div class="degrade"></div>
             <p class="quizz-titulo">
@@ -81,7 +91,7 @@ function renderizarQuizzes(quizzes) {
           `;
       } else {
         todosQuizzes.innerHTML += `
-        <article class="quizz" onclick="selecionarQuizz(${quiz.id})">
+        <article class="quizz" onclick="obterUmQuiz(${quiz.id})">
           <img src="${quiz.image}" class="imagem-quiz"/>
           <div class="degrade"></div>
           <p class="quizz-titulo">
@@ -129,9 +139,9 @@ function renderizarQuizCriado(quiz) {
   `;
 }
 
-function selecionarQuizz(id) {
+function selecionarQuizz(id, selecionado) {
   quizzSelecionado = id;
-  const selecionado = arrQuizzes.filter((elemento) => elemento.id === id);
+
   const paginaQuizz = document.querySelector(".pagina-quizz");
   const main = document.querySelector("main");
   const caixaPerguntas = document.getElementsByClassName("caixaPerguntas")[0];
@@ -226,6 +236,8 @@ function selecionarQuizz(id) {
   `;
 
   window.scroll({ top: 0, behavior: "smooth" });
+
+  esconderLoader();
 }
 
 function selecionarAlternativa(alternativaSelecionada) {
@@ -305,7 +317,7 @@ function mostrarResultado() {
 }
 
 function reiniciarQuizz() {
-  selecionarQuizz(quizzSelecionado);
+  obterUmQuiz(quizzSelecionado);
 }
 
 function criarQuizz() {
@@ -933,6 +945,8 @@ function atualizarLocalStorage(arr) {
 }
 
 function deletarQuiz(id) {
+  mostrarLoader();
+
   const URL = `${URL_BASE}/quizzes/${id}`;
   const { key } = arrSeusQuizzes.filter((quiz) => quiz.id === id)[0];
 
@@ -940,6 +954,8 @@ function deletarQuiz(id) {
     const req = axios.delete(URL, { headers: { "Secret-Key": key } });
 
     req.then(() => {
+      esconderLoader();
+
       const novoArray = arrSeusQuizzes.filter((quiz) => quiz.id !== id);
 
       atualizarLocalStorage(novoArray);
@@ -947,8 +963,22 @@ function deletarQuiz(id) {
       window.location.reload();
     });
 
-    req.catch(() => console.log("Algo deu errado! :("));
+    req.catch(() => alert("Algo deu errado! :("));
+
+    esconderLoader();
   }
+}
+
+function mostrarLoader() {
+  const loader = document.querySelector(".loader-container");
+
+  loader.classList.remove("hidden");
+}
+
+function esconderLoader() {
+  const loader = document.querySelector(".loader-container");
+
+  loader.classList.add("hidden");
 }
 
 function inicializarLocalStorage() {

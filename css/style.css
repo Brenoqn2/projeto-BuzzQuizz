@@ -37,7 +37,7 @@ header {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 5;
+  z-index: 10;
 }
 
 header h1 {
@@ -514,23 +514,24 @@ h3 {
   background: rgba(0, 0, 0, 0.8);
   height: calc(100% + 100px);
   position: absolute;
-  z-index: 7;
+  z-index: 11;
   top: -100px;
   bottom: 0;
   overflow: hidden;
 }
 
 .caixa-alerta main {
+  max-width: 450px;
+  width: 80%;
+  height: max-content;
+  background-color: #fafafa;
+  padding: 40px 0;
+  border-radius: 6px;
+
   position: fixed;
   top: 50px;
   left: 50%;
   transform: translateX(-50%);
-
-  max-width: 450px;
-  width: 80%;
-  height: 30%;
-  background-color: #fafafa;
-  border-radius: 6px;
 
   display: flex;
   justify-content: center;
@@ -575,5 +576,49 @@ h3 {
   filter: brightness(0.9);
 }
 
+.loader-container {
+  width: 100%;
+  height: calc(100% + 100px);
+  background-color: var(--cor-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  overflow: hidden;
+  top: -100px;
+  z-index: 3;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.loader-container.hidden {
+  opacity: 0;
+  display: none;
+}
+
+.loader {
+  width: 60px;
+  height: 60px;
+  border: 5px solid var(--cor-texto-box);
+  border-top-color: var(--cor-principal);
+  border-radius: 50%;
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media screen and (min-width: 780px) {
+}
+
+@media screen and (max-width: 450px) {
+  .caixa-alerta h3 {
+    font-size: 18px;
+  }
 }
