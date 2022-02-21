@@ -78,7 +78,7 @@ function renderizarQuizzes(quizzes) {
 
       if (arrSeusQuizzes && estaEmSeusQuizzes) {
         seusQuizzes.innerHTML += `
-          <article class="quizz" onclick="obterUmQuiz(${quiz.id})">
+          <article class="quizz" onclick="obterUmQuiz(${quiz.id})" data-identifier="quizz-card">
             <img src="${quiz.image}" class="imagem-quiz"/>
             <div class="degrade"></div>
             <p class="quizz-titulo">
@@ -96,7 +96,7 @@ function renderizarQuizzes(quizzes) {
           `;
       } else {
         todosQuizzes.innerHTML += `
-        <article class="quizz" onclick="obterUmQuiz(${quiz.id})">
+        <article class="quizz" onclick="obterUmQuiz(${quiz.id})" data-identifier="quizz-card">
           <img src="${quiz.image}" class="imagem-quiz"/>
           <div class="degrade"></div>
           <p class="quizz-titulo">
@@ -179,14 +179,14 @@ function selecionarQuizz(id, selecionado) {
     for (let i = 0; i < perguntasEmbaralhadas.length; i++) {
       if (perguntasEmbaralhadas[i].isCorrectAnswer) {
         alternativas += `
-        <div class="alternativa certa" onclick="selecionarAlternativa(this)">
+        <div class="alternativa certa" onclick="selecionarAlternativa(this)" data-identifier="answer">
           <img src="${perguntasEmbaralhadas[i].image}"/>
           <p class="texto">${perguntasEmbaralhadas[i].text}</p>
         </div>
         `;
       } else {
         alternativas += `
-        <div class="alternativa" onclick="selecionarAlternativa(this)">
+        <div class="alternativa" onclick="selecionarAlternativa(this)" data-identifier="answer">
           <img src="${perguntasEmbaralhadas[i].image}"/>
           <p class="texto">${perguntasEmbaralhadas[i].text}</p>
         </div>
@@ -194,7 +194,7 @@ function selecionarQuizz(id, selecionado) {
       }
     }
     let perguntaElemento = `
-    <div class = "pergunta">
+    <div class = "pergunta" data-identifier="question">
       <p class="pergunta-texto" style="background-color:${pergunta.color}">
         ${pergunta.title}
       </p>
@@ -471,7 +471,7 @@ function preencherPerguntas(numeroPergunta = 1) {
   for (let i = 1; i < quizEnviar.qtdPerguntas + 1; i++) {
     if (i < numeroPergunta) {
       paginaCriarQuizz.innerHTML += `
-      <div class="caixaEditarPergunta" onclick="preencherPerguntas(${i})">
+      <div class="caixaEditarPergunta" onclick="preencherPerguntas(${i})" data-identifier="expand">
         <h3 class="titulo-input">Pergunta ${i}</h3>
         <ion-icon name="create-outline"></ion-icon>
       </div>
@@ -482,37 +482,37 @@ function preencherPerguntas(numeroPergunta = 1) {
         <div class="container">
           <div>
             <h3 class="titulo-input">Pergunta ${numeroPergunta}</h3>
-            <input type="text" id="texto-pergunta" placeholder="Texto da pergunta" required />
-            <input type="text" id="cor-pergunta" placeholder="Cor de fundo da pergunta" required />
+            <input type="text" id="texto-pergunta" placeholder="Texto da pergunta" required data-identifier="question"/>
+            <input type="text" id="cor-pergunta" placeholder="Cor de fundo da pergunta" required data-identifier="question"/>
           </div>
   
           <div>
             <h3 class="titulo-input">Resposta correta</h3>
-            <input type="text" id="resposta-correta" placeholder="Resposta Correta" required />
-            <input type="text" id="url-imagem" placeholder="URL da imagem" required />
+            <input type="text" id="resposta-correta" placeholder="Resposta Correta" required data-identifier="question"/>
+            <input type="text" id="url-imagem" placeholder="URL da imagem" required data-identifier="question"/>
           </div>
   
           <div>
             <h3 class="titulo-input">Respostas incorretas</h3>
-            <input type="text" id="resposta-incorreta1" placeholder="Resposta incorreta 1" required />
-            <input type="text" id="url-imagem1" placeholder="URL da imagem 1" required />
+            <input type="text" id="resposta-incorreta1" placeholder="Resposta incorreta 1" required data-identifier="question"/>
+            <input type="text" id="url-imagem1" placeholder="URL da imagem 1" required data-identifier="question"/>
           </div>
   
           <div>
-            <input type="text" id="resposta-incorreta2" placeholder="Resposta incorreta 2" />
-            <input type="text" id="url-imagem2" placeholder="URL da imagem 2" />
+            <input type="text" id="resposta-incorreta2" placeholder="Resposta incorreta 2" data-identifier="question"/>
+            <input type="text" id="url-imagem2" placeholder="URL da imagem 2" data-identifier="question"/>
           </div> 
   
           <div>
-            <input type="text" id="resposta-incorreta3" placeholder="Resposta incorreta 3" />
-            <input type="text" id="url-imagem3" placeholder="URL da imagem 3" />
+            <input type="text" id="resposta-incorreta3" placeholder="Resposta incorreta 3" data-identifier="question"/>
+            <input type="text" id="url-imagem3" placeholder="URL da imagem 3" data-identifier="question"/>
           </div>
         </div>
       </form>
       `;
     } else {
       paginaCriarQuizz.innerHTML += `
-      <div class="caixaEditarPergunta" onclick="preencherPerguntas(${i})">
+      <div class="caixaEditarPergunta" onclick="preencherPerguntas(${i})" data-identifier="expand">
         <h3 class="titulo-input">Pergunta ${i}</h3>
         <ion-icon name="create-outline"></ion-icon>
       </div>
@@ -617,7 +617,7 @@ function preencherNiveis(numeroNivel = 1) {
     for (let i = 1; i < quizEnviar.qtdNiveis + 1; i++) {
       if (i < numeroNivel) {
         paginaCriarQuizz.innerHTML += `
-        <div class="caixaEditarPergunta" onclick="preencherNiveis(${i})">
+        <div class="caixaEditarPergunta" onclick="preencherNiveis(${i})" data-identifier="expand">
           <h3 class="titulo-input">Nível ${i}</h3>
           <ion-icon name="create-outline"></ion-icon>
         </div>
@@ -628,17 +628,17 @@ function preencherNiveis(numeroNivel = 1) {
           <div class="container">
             <div class="container-niveis">
               <h3 class="titulo-input">Nível ${numeroNivel}</h3>
-              <input type="text" id="titulo-nivel" placeholder="Título do nível" />
-              <input type="text" id="valor-nivel" placeholder="% de acerto mínima" />
-              <input type="text" id="imagem-nivel" placeholder="URL da imagem do nível" />
-              <textarea id="texto-nivel" placeholder="Descrição do nível"></textarea>
+              <input type="text" id="titulo-nivel" placeholder="Título do nível" data-identifier="level" />
+              <input type="text" id="valor-nivel" placeholder="% de acerto mínima" data-identifier="level" />
+              <input type="text" id="imagem-nivel" placeholder="URL da imagem do nível" data-identifier="level" />
+              <textarea id="texto-nivel" placeholder="Descrição do nível" data-identifier="level"></textarea>
             </div>
           </div>
         </form>
         `;
       } else {
         paginaCriarQuizz.innerHTML += `
-        <div class="caixaEditarPergunta" onclick="preencherNiveis(${i})">
+        <div class="caixaEditarPergunta" onclick="preencherNiveis(${i})" data-identifier="expand">
           <h3 class="titulo-input">Nível ${i}</h3>
           <ion-icon name="create-outline"></ion-icon>
         </div>

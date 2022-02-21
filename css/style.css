@@ -359,7 +359,6 @@ main {
 }
 
 .nivel section .mensagem {
-  margin-top: 20px;
   font-size: 17px;
   font-weight: 700;
   color: var(--cor-mensagem);
@@ -756,8 +755,8 @@ h3 {
   }
   
   .nivel section .mensagem {
-    width:328px;
-    height:250px;
+    width:310px;
+    height:273px;
     font-size: 19px;
     font-weight: 700;
     position:absolute;
