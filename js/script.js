@@ -1,6 +1,7 @@
 const URL_BASE = "https://mock-api.driven.com.br/api/v4/buzzquizz";
 const arrQuizzes = [];
-const arrSeusQuizzes = JSON.parse(localStorage.getItem("seusQuizzes"));
+let arrSeusQuizzes = [];
+arrSeusQuizzes = JSON.parse(localStorage.getItem("seusQuizzes"));
 let pontuacao = 0;
 let niveisQuizz = [];
 let pontuacaoMeta = 0;
@@ -36,29 +37,33 @@ function renderizarQuizzes(quizzes) {
   let quizCriado = sessionStorage.getItem("quizCriado");
   if (quizCriado) {
     sessionStorage.removeItem("quizCriado");
-    selecionarQuizz(arrSeusQuizzes[arrSeusQuizzes.length - 1].id);
+    obterUmQuiz(arrSeusQuizzes[arrSeusQuizzes.length - 1].id);
   } else {
     const seusQuizzes = document.querySelector(".seus-quizzes");
     const todosQuizzes = document.querySelector(".todos-quizzes");
     const caixasQuizzesVazios = seusQuizzes.querySelector(
       ".caixaQuizzesVazios"
     );
-    const header = seusQuizzes.querySelector(".header");
+    const header = document.querySelector(".headerSeusQuizzes");
 
     todosQuizzes.innerHTML = "";
-    try {
-      arrSeusQuizzes.forEach((seuQuiz) => {
+    if (arrSeusQuizzes != "" || arrSeusQuizzes != null) {
+      let qtdSeusQuizzes = arrSeusQuizzes.length;
+      for (let j = 0; j<qtdSeusQuizzes;j++) {
         let cont = 0;
         for (let i = 0; i < arrQuizzes.length; i++) {
-          if (arrQuizzes[i].id == seuQuiz.id) {
+          if (arrQuizzes[i].id == arrSeusQuizzes[j].id) {
             cont++;
           }
         }
         if (cont == 0) {
-          arrSeusQuizzes.pop(seuQuiz);
+          const index = arrSeusQuizzes.indexOf(arrSeusQuizzes[j])
+          arrSeusQuizzes.splice(index,1);
+          j = j-1;
+          qtdSeusQuizzes = arrSeusQuizzes.length;
         }
-      });
-    } catch (e) {}
+      };
+    }
 
     if (arrSeusQuizzes && arrSeusQuizzes.length) {
       caixasQuizzesVazios.classList.add("hidden");
@@ -212,7 +217,7 @@ function selecionarQuizz(id, selecionado) {
       </div>
       <section>
         <img src="${nivel.image}" />
-        <p class="mensagem">${nivel.text}</p>
+        <div class="mensagem">${nivel.text}</div>
       </section>
     </article>
     `;
@@ -621,12 +626,12 @@ function preencherNiveis(numeroNivel = 1) {
         paginaCriarQuizz.innerHTML += `
         <form class ="form-criar criar-perguntas" >
           <div class="container">
-            <div>
+            <div class="container-niveis">
               <h3 class="titulo-input">Nível ${numeroNivel}</h3>
               <input type="text" id="titulo-nivel" placeholder="Título do nível" />
               <input type="text" id="valor-nivel" placeholder="% de acerto mínima" />
               <input type="text" id="imagem-nivel" placeholder="URL da imagem do nível" />
-              <input type="text" id="texto-nivel" placeholder="Descrição do nível" />
+              <textarea id="texto-nivel" placeholder="Descrição do nível"></textarea>
             </div>
           </div>
         </form>
@@ -753,8 +758,9 @@ function finalizarQuizz() {
     let promise = axios.post(`${URL_BASE}/quizzes`, quizzCompleto);
     promise.then((res) => {
       let quizzID = res.data.id;
+      let quizzKey = res.data.key;
       arrQuizzes.push();
-      armazenarQuiz(quizzID);
+      armazenarQuiz(quizzID,quizzKey);
       const paginaCriarQuizz = document.querySelector(".info-basica");
       paginaCriarQuizz.innerHTML = `
       <h2 class = "titulo container">Seu quizz está pronto!</h2>
