@@ -47,7 +47,7 @@ function renderizarQuizzes(quizzes) {
     const header = document.querySelector(".headerSeusQuizzes");
 
     todosQuizzes.innerHTML = "";
-    if (arrSeusQuizzes != "" || arrSeusQuizzes != null) {
+    if (arrSeusQuizzes) {
       let qtdSeusQuizzes = arrSeusQuizzes.length;
       for (let j = 0; j<qtdSeusQuizzes;j++) {
         let cont = 0;
@@ -74,7 +74,9 @@ function renderizarQuizzes(quizzes) {
     }
 
     quizzes.forEach((quiz) => {
-      const estaEmSeusQuizzes = arrSeusQuizzes.find(({ id }) => id === quiz.id);
+      if (arrSeusQuizzes){
+        var estaEmSeusQuizzes = arrSeusQuizzes.find(({ id }) => id === quiz.id);
+      }
 
       if (arrSeusQuizzes && estaEmSeusQuizzes) {
         seusQuizzes.innerHTML += `
